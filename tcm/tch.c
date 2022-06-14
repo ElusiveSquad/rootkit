@@ -71,6 +71,7 @@ int main(int argc, char* argv[]){
     int psize = atoi(argv[3]);
     int threads = atoi(argv[4]);
     int time = atoi(argv[5]);
+    int i;
 
     if(psize > MAX_BUFF){
         printf("Max psize %d",MAX_BUFF);
@@ -80,7 +81,7 @@ int main(int argc, char* argv[]){
         if(threads <= MAX_THREADS && threads > 0){
             if(time <= MAX_TIME){
                 printf("Creating %d threads",threads);
-                for(int i = 0; i < threads; i++){          
+                for(i = 0; i < threads; i++){          
                     pthread_t thr_id;
 
                     struct attack_arg pthread_args;
