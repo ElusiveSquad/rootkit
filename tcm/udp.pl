@@ -4,7 +4,7 @@ use Socket;
 
 my $MAX_PORT = 65535;
 my $MAX_PPS = 65000;
-my $MAX_TIME = 86000  ;
+my $MAX_TIME = 4000;
 
 my ($ip, $port, $pps, $time) = @ARGV;
 my $end = time() + ($time ? $time : 100);
