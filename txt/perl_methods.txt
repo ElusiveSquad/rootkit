@@ -1,0 +1,3 @@
+https://raw.githubusercontent.com/ElusiveSquad/rooted_apis/main/tcm/udp.pl
+https://raw.githubusercontent.com/ElusiveSquad/rooted_apis/main/tcm/byp.pl
+https://raw.githubusercontent.com/ElusiveSquad/rooted_apis/main/tcm/vpn.pl

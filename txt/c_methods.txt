@@ -1,0 +1,1 @@
+https://raw.githubusercontent.com/ElusiveSquad/rooted_apis/main/tcm/tch.c
