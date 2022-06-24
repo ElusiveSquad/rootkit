@@ -95,7 +95,6 @@ class Sockets(object):
                             sock.send(packet)
                     sock.close()
                 except Exception as e:
-                    print(str(e))
                     sock.close()
             else:
                 try:
